@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="5dp"
+        android:backgroundTint="@color/gray_light">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/text_view_setup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Setup Setup Setup Setup Setup" />
+
+        <TextView
+            android:id="@+id/text_view_punch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            tools:text="Punch Punch Punch Punch Punch Punch Punch Punch Punch Punch Punch Punch"
+            />
+    </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>
