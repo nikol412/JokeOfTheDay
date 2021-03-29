@@ -2,12 +2,14 @@ package com.nikol412.jokeoftheday.getJoke.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.nikol412.jokeoftheday.api.JokeResponse
 import com.nikol412.jokeoftheday.databinding.JokeItemRowBinding
+import com.nikol412.jokeoftheday.generated.callback.OnClickListener
 
-class JokeAdapter() : RecyclerView.Adapter<JokeItemViewHolder>() {
+class JokeAdapter(private val onItemClick: onItemClick) : RecyclerView.Adapter<JokeItemViewHolder>() {
 
     private var jokeList: MutableList<JokeResponse> = mutableListOf()
 
@@ -18,7 +20,7 @@ class JokeAdapter() : RecyclerView.Adapter<JokeItemViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: JokeItemViewHolder, position: Int) {
-        holder.onBind(jokeList[position])
+        holder.onBind(jokeList[position], onItemClick)
     }
 
     override fun getItemCount(): Int = jokeList.size
@@ -27,6 +29,7 @@ class JokeAdapter() : RecyclerView.Adapter<JokeItemViewHolder>() {
         jokeList.add(item)
         notifyItemInserted(jokeList.lastIndex)
     }
+
     fun setItems(items: List<JokeResponse>) {
         if(jokeList.isEmpty()) {
             jokeList = items.toMutableList()
@@ -54,8 +57,15 @@ class JokeAdapter() : RecyclerView.Adapter<JokeItemViewHolder>() {
 class JokeItemViewHolder(private val binding: JokeItemRowBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun onBind(item: JokeResponse) {
+    fun onBind(item: JokeResponse, clickListener: onItemClick) {
+        binding.linearLayoutRoot.setOnClickListener {
+            clickListener.onCLick(binding.textViewSetup, binding.textViewPunch)
+        }
         binding.textViewSetup.text = item.setup
         binding.textViewPunch.text = item.punchline
     }
+}
+
+interface onItemClick {
+    fun onCLick(preTextView: TextView, postTextView: TextView)
 }
