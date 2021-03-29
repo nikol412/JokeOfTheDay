@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.nikol412.jokeoftheday.R
 import com.nikol412.jokeoftheday.databinding.FragmentGetJokeBinding
@@ -23,7 +22,7 @@ class GetJokeFragment : Fragment() {
     private val viewModel by viewModels<GetJokeVM>()
 
     private val adapter by lazy {
-        JokeAdapter(object: onItemClick {
+        JokeAdapter(object : onItemClick {
             override fun onCLick(preTextView: TextView, postTextView: TextView) {
                 expandTextView(preTextView, postTextView)
             }
@@ -36,9 +35,9 @@ class GetJokeFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_get_joke, container, false)
         binding.vm = viewModel
@@ -49,10 +48,7 @@ class GetJokeFragment : Fragment() {
 
 
         viewModel.jokeResponse.observe(viewLifecycleOwner, { joke ->
-
             adapter.setItem(joke)
-//            adapter.setItems(viewModel.jokes.toList().filterNotNull())
-
         })
         return binding.root
     }

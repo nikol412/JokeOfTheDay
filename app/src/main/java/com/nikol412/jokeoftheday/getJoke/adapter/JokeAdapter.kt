@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.nikol412.jokeoftheday.api.JokeResponse
 import com.nikol412.jokeoftheday.databinding.JokeItemRowBinding
-import com.nikol412.jokeoftheday.generated.callback.OnClickListener
 
 class JokeAdapter(private val onItemClick: onItemClick) : RecyclerView.Adapter<JokeItemViewHolder>() {
 
@@ -15,7 +14,7 @@ class JokeAdapter(private val onItemClick: onItemClick) : RecyclerView.Adapter<J
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokeItemViewHolder {
         return JokeItemViewHolder(
-            JokeItemRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                JokeItemRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
@@ -31,14 +30,14 @@ class JokeAdapter(private val onItemClick: onItemClick) : RecyclerView.Adapter<J
     }
 
     fun setItems(items: List<JokeResponse>) {
-        if(jokeList.isEmpty()) {
+        if (jokeList.isEmpty()) {
             jokeList = items.toMutableList()
             notifyDataSetChanged()
         } else {
-            val result = DiffUtil.calculateDiff(object: DiffUtil.Callback() {
+            val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                 override fun areContentsTheSame(
-                    oldItemPosition: Int,
-                    newItemPosition: Int
+                        oldItemPosition: Int,
+                        newItemPosition: Int
                 ): Boolean = jokeList[oldItemPosition] == items[newItemPosition]
 
                 override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean = jokeList[oldItemPosition] == items[newItemPosition]
@@ -55,7 +54,7 @@ class JokeAdapter(private val onItemClick: onItemClick) : RecyclerView.Adapter<J
 }
 
 class JokeItemViewHolder(private val binding: JokeItemRowBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root) {
 
     fun onBind(item: JokeResponse, clickListener: onItemClick) {
         binding.linearLayoutRoot.setOnClickListener {
