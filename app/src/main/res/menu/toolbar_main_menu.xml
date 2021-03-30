@@ -4,4 +4,8 @@
     <item
         android:id="@+id/getJokeFragment"
         android:title="Get Joke"/>
+
+    <item
+        android:id="@+id/favouritesJokesFragment"
+        android:title="Favourites Jokes"/>
 </menu>

@@ -1,4 +1,4 @@
-package com.nikol412.jokeoftheday.ui.getJoke
+package com.nikol412.jokeoftheday.ui.favourites
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
@@ -9,21 +9,21 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.nikol412.jokeoftheday.R
-import com.nikol412.jokeoftheday.databinding.FragmentGetJokeBinding
+import com.nikol412.jokeoftheday.databinding.FragmentFavouritesJokesBinding
 import com.nikol412.jokeoftheday.ui.getJoke.adapter.JokeAdapter
 import com.nikol412.jokeoftheday.ui.getJoke.adapter.onItemClick
 import com.nikol412.jokeoftheday.ui.getJoke.adapter.onItemTouchAdapter
+import kotlinx.coroutines.flow.collect
 
+class FavouritesJokesFragment : Fragment() {
 
-class GetJokeFragment : Fragment() {
-
-    lateinit var binding: FragmentGetJokeBinding
-
-    private val viewModel by viewModels<GetJokeVM>()
+    private val viewModel by viewModels<FavouritesJokesViewModel>()
+    private lateinit var binding: FragmentFavouritesJokesBinding
 
     private val adapter by lazy {
         JokeAdapter(object : onItemClick {
@@ -33,34 +33,29 @@ class GetJokeFragment : Fragment() {
         })
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_get_joke, container, false)
-        binding.vm = viewModel
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_favourites_jokes, container, false)
         binding.lifecycleOwner = this
 
-        binding.recyclerViewJokes.layoutManager = StaggeredGridLayoutManager(
-            2,
-            StaggeredGridLayoutManager.VERTICAL
-        )
-        val touchCallback = SimpleTouchHelper(adapter)
-        val itemTouchHelper = ItemTouchHelper(touchCallback)
-        itemTouchHelper.attachToRecyclerView(binding.recyclerViewJokes)
+        binding.recyclerViewJokes.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+
+        val touchCallback = FavouritesTouchHelper(adapter)
+        val touchHelper = ItemTouchHelper(touchCallback)
+        touchHelper.attachToRecyclerView(binding.recyclerViewJokes)
 
         binding.recyclerViewJokes.adapter = adapter
 
+        lifecycleScope.launchWhenStarted {
+            viewModel.favouritesJokesList.collect {
+                adapter.setItems(it)
+            }
+        }
 
-        viewModel.jokeResponse.observe(viewLifecycleOwner, { joke ->
-            adapter.setItem(joke)
-        })
         return binding.root
     }
 
@@ -73,14 +68,21 @@ class GetJokeFragment : Fragment() {
         animation2.duration = 500
         animation2.start()
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchJokes()
+    }
 }
 
-class SimpleTouchHelper(private val adapter: onItemTouchAdapter) : ItemTouchHelper.Callback() {
+class FavouritesTouchHelper(private val adapter: onItemTouchAdapter) : ItemTouchHelper.Callback() {
+
     override fun getMovementFlags(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
     ): Int {
-        val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END
+        val dragFlags =
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END
         val swipeFlags = ItemTouchHelper.START or ItemTouchHelper.END
         return makeMovementFlags(dragFlags, swipeFlags)
     }

@@ -4,12 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.nikol412.jokeoftheday.api.JokeResponse
 import com.nikol412.jokeoftheday.databinding.JokeItemRowBinding
 import java.util.*
 
-class JokeAdapter(private val onItemClick: onItemClick) : RecyclerView.Adapter<JokeItemViewHolder>(), onItemTouchAdapter {
+class JokeAdapter(private val onItemClick: onItemClick) :
+    RecyclerView.Adapter<JokeItemViewHolder>(), onItemTouchAdapter {
 
     private var jokeList: MutableList<JokeResponse> = mutableListOf()
 
@@ -68,14 +70,23 @@ class JokeAdapter(private val onItemClick: onItemClick) : RecyclerView.Adapter<J
         return true
     }
 
-    override fun onAddToFavourites(position: Int) {
-        jokeList.removeAt(position)
-        notifyItemRemoved(position)
+    override fun onSwipe(position: Int, direction: Int) {
+        when (direction) {
+            ItemTouchHelper.END -> {
+                jokeList.removeAt(position)
+                notifyItemRemoved(position)
+            }
+            ItemTouchHelper.START -> {
+                //TODO implement saving to favourites with animation
+                jokeList.removeAt(position)
+                notifyItemRemoved(position)
+            }
+        }
     }
 }
 
 class JokeItemViewHolder(private val binding: JokeItemRowBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    RecyclerView.ViewHolder(binding.root) {
 
     fun onBind(item: JokeResponse, clickListener: onItemClick) {
         binding.linearLayoutRoot.setOnClickListener {
@@ -93,5 +104,5 @@ interface onItemClick {
 interface onItemTouchAdapter {
     fun onItemMove(startPosition: Int, endPosition: Int): Boolean
 
-    fun onAddToFavourites(position: Int)
+    fun onSwipe(position: Int, direction: Int)
 }
