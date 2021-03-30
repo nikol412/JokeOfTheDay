@@ -1,4 +1,4 @@
-package com.nikol412.jokeoftheday.getJoke
+package com.nikol412.jokeoftheday.ui.getJoke
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

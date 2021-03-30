@@ -5,6 +5,6 @@
 
     <fragment
         android:id="@+id/getJokeFragment"
-        android:name="com.nikol412.jokeoftheday.getJoke.GetJokeFragment"
+        android:name="com.nikol412.jokeoftheday.ui.getJoke.GetJokeFragment"
         android:label="GetJokeFragment" />
 </navigation>

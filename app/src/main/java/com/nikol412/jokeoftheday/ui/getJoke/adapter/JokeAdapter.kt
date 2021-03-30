@@ -1,4 +1,4 @@
-package com.nikol412.jokeoftheday.getJoke.adapter
+package com.nikol412.jokeoftheday.ui.getJoke.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

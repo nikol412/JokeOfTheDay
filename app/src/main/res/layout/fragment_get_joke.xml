@@ -7,7 +7,7 @@
     <data>
         <variable
             name="vm"
-            type="com.nikol412.jokeoftheday.getJoke.GetJokeVM" />
+            type="com.nikol412.jokeoftheday.ui.getJoke.GetJokeVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

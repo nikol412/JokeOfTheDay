@@ -1,4 +1,4 @@
-package com.nikol412.jokeoftheday.getJoke
+package com.nikol412.jokeoftheday.ui.getJoke
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.nikol412.jokeoftheday.R
 import com.nikol412.jokeoftheday.databinding.FragmentGetJokeBinding
-import com.nikol412.jokeoftheday.getJoke.adapter.JokeAdapter
-import com.nikol412.jokeoftheday.getJoke.adapter.onItemClick
-import com.nikol412.jokeoftheday.getJoke.adapter.onItemTouchAdapter
+import com.nikol412.jokeoftheday.ui.getJoke.adapter.JokeAdapter
+import com.nikol412.jokeoftheday.ui.getJoke.adapter.onItemClick
+import com.nikol412.jokeoftheday.ui.getJoke.adapter.onItemTouchAdapter
 
 
 class GetJokeFragment : Fragment() {
