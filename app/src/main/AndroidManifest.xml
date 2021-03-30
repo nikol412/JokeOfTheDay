@@ -10,6 +10,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name=".JokeOfTheDayApp"
         android:theme="@style/Theme.JokeOfTheDay">
         <activity android:name=".MainActivity">
             <intent-filter>

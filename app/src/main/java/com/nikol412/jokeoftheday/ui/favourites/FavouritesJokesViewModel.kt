@@ -2,10 +2,11 @@ package com.nikol412.jokeoftheday.ui.favourites
 
 import androidx.lifecycle.ViewModel
 import com.nikol412.jokeoftheday.api.JokeResponse
+import com.nikol412.jokeoftheday.ui.base.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class FavouritesJokesViewModel : ViewModel() {
+class FavouritesJokesViewModel : BaseViewModel() {
     private val mutableFavouritesJokesList = MutableStateFlow(listOf<JokeResponse>())
     val favouritesJokesList: StateFlow<List<JokeResponse>> = mutableFavouritesJokesList
 

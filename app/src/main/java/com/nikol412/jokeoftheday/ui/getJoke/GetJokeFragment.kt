@@ -17,13 +17,15 @@ import com.nikol412.jokeoftheday.databinding.FragmentGetJokeBinding
 import com.nikol412.jokeoftheday.ui.getJoke.adapter.JokeAdapter
 import com.nikol412.jokeoftheday.ui.getJoke.adapter.onItemClick
 import com.nikol412.jokeoftheday.ui.getJoke.adapter.onItemTouchAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 
 class GetJokeFragment : Fragment() {
 
     lateinit var binding: FragmentGetJokeBinding
 
-    private val viewModel by viewModels<GetJokeVM>()
+    private val viewModel by viewModel<GetJokeVM>()
 
     private val adapter by lazy {
         JokeAdapter(object : onItemClick {

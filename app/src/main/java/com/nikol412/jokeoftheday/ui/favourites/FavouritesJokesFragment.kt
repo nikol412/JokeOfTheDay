@@ -19,10 +19,12 @@ import com.nikol412.jokeoftheday.ui.getJoke.adapter.JokeAdapter
 import com.nikol412.jokeoftheday.ui.getJoke.adapter.onItemClick
 import com.nikol412.jokeoftheday.ui.getJoke.adapter.onItemTouchAdapter
 import kotlinx.coroutines.flow.collect
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class FavouritesJokesFragment : Fragment() {
 
-    private val viewModel by viewModels<FavouritesJokesViewModel>()
+    private val viewModel by viewModel<FavouritesJokesViewModel>()
     private lateinit var binding: FragmentFavouritesJokesBinding
 
     private val adapter by lazy {
