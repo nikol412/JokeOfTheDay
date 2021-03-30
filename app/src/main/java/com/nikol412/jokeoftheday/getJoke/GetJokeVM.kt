@@ -24,7 +24,7 @@ class GetJokeVM : ViewModel() {
             isLoading.value = false
 
             jokeResponse.value = result ?: return@launch
-//            onNeedUpdateAdapter.call()
         }
     }
+
 }
