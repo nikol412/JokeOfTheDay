@@ -9,11 +9,15 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.nikol412.jokeoftheday.R
 import com.nikol412.jokeoftheday.databinding.FragmentGetJokeBinding
 import com.nikol412.jokeoftheday.getJoke.adapter.JokeAdapter
 import com.nikol412.jokeoftheday.getJoke.adapter.onItemClick
+import com.nikol412.jokeoftheday.getJoke.adapter.onItemTouchAdapter
+
 
 class GetJokeFragment : Fragment() {
 
@@ -35,15 +39,22 @@ class GetJokeFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_get_joke, container, false)
         binding.vm = viewModel
         binding.lifecycleOwner = this
 
-        binding.recyclerViewJokes.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        binding.recyclerViewJokes.layoutManager = StaggeredGridLayoutManager(
+            2,
+            StaggeredGridLayoutManager.VERTICAL
+        )
+        val touchCallback = SimpleTouchHelper(adapter)
+        val itemTouchHelper = ItemTouchHelper(touchCallback)
+        itemTouchHelper.attachToRecyclerView(binding.recyclerViewJokes)
+
         binding.recyclerViewJokes.adapter = adapter
 
 
@@ -61,5 +72,29 @@ class GetJokeFragment : Fragment() {
         val animation2 = ObjectAnimator.ofInt(textView2, "maxLines", textView1.lineCount)
         animation2.duration = 500
         animation2.start()
+    }
+}
+
+class SimpleTouchHelper(private val adapter: onItemTouchAdapter) : ItemTouchHelper.Callback() {
+    override fun getMovementFlags(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder
+    ): Int {
+        val dragFlags = ItemTouchHelper.UP
+        val swipeFlags = ItemTouchHelper.START or ItemTouchHelper.END
+        return makeMovementFlags(dragFlags, swipeFlags)
+    }
+
+    override fun onMove(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+    ): Boolean {
+        adapter.onItemMove(viewHolder.adapterPosition, target.adapterPosition)
+        return true
+    }
+
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        adapter.onAddToFavourites(viewHolder.adapterPosition)
     }
 }

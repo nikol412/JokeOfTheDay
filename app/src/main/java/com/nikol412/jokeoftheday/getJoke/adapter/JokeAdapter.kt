@@ -7,14 +7,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.nikol412.jokeoftheday.api.JokeResponse
 import com.nikol412.jokeoftheday.databinding.JokeItemRowBinding
+import java.util.*
 
-class JokeAdapter(private val onItemClick: onItemClick) : RecyclerView.Adapter<JokeItemViewHolder>() {
+class JokeAdapter(private val onItemClick: onItemClick) : RecyclerView.Adapter<JokeItemViewHolder>(), onItemTouchAdapter {
 
     private var jokeList: MutableList<JokeResponse> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokeItemViewHolder {
         return JokeItemViewHolder(
-                JokeItemRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            JokeItemRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
@@ -36,11 +37,12 @@ class JokeAdapter(private val onItemClick: onItemClick) : RecyclerView.Adapter<J
         } else {
             val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                 override fun areContentsTheSame(
-                        oldItemPosition: Int,
-                        newItemPosition: Int
+                    oldItemPosition: Int,
+                    newItemPosition: Int
                 ): Boolean = jokeList[oldItemPosition] == items[newItemPosition]
 
-                override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean = jokeList[oldItemPosition] == items[newItemPosition]
+                override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+                    jokeList[oldItemPosition] == items[newItemPosition]
 
                 override fun getNewListSize(): Int = items.size
 
@@ -50,6 +52,25 @@ class JokeAdapter(private val onItemClick: onItemClick) : RecyclerView.Adapter<J
             jokeList = items.toMutableList()
             result.dispatchUpdatesTo(this)
         }
+    }
+
+    override fun onItemMove(startPosition: Int, endPosition: Int): Boolean {
+        if (startPosition < endPosition) {
+            for (i in startPosition until endPosition) {
+                Collections.swap(jokeList, i, i + 1)
+            }
+        } else {
+            for (i in endPosition downTo startPosition + 1) {
+                Collections.swap(jokeList, i, i - 1)
+            }
+        }
+        notifyItemMoved(startPosition, endPosition)
+        return true
+    }
+
+    override fun onAddToFavourites(position: Int) {
+        jokeList.removeAt(position)
+        notifyItemRemoved(position)
     }
 }
 
@@ -67,4 +88,10 @@ class JokeItemViewHolder(private val binding: JokeItemRowBinding) :
 
 interface onItemClick {
     fun onCLick(preTextView: TextView, postTextView: TextView)
+}
+
+interface onItemTouchAdapter {
+    fun onItemMove(startPosition: Int, endPosition: Int): Boolean
+
+    fun onAddToFavourites(position: Int)
 }
