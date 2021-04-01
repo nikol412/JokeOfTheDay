@@ -8,12 +8,13 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.nikol412.jokeoftheday.api.JokeResponse
 import com.nikol412.jokeoftheday.databinding.JokeItemRowBinding
+import com.nikol412.jokeoftheday.db.model.JokeOfficial
 import java.util.*
 
 class JokeAdapter(private val onItemClick: onItemClick) :
     RecyclerView.Adapter<JokeItemViewHolder>(), onItemTouchAdapter {
 
-    private var jokeList: MutableList<JokeResponse> = mutableListOf()
+    private var jokeList: MutableList<JokeOfficial> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokeItemViewHolder {
         return JokeItemViewHolder(
@@ -27,12 +28,12 @@ class JokeAdapter(private val onItemClick: onItemClick) :
 
     override fun getItemCount(): Int = jokeList.size
 
-    fun setItem(item: JokeResponse) {
+    fun setItem(item: JokeOfficial) {
         jokeList.add(item)
         notifyItemInserted(jokeList.lastIndex)
     }
 
-    fun setItems(items: List<JokeResponse>) {
+    fun setItems(items: List<JokeOfficial>) {
         if (jokeList.isEmpty()) {
             jokeList = items.toMutableList()
             notifyDataSetChanged()
@@ -48,7 +49,7 @@ class JokeAdapter(private val onItemClick: onItemClick) :
 
                 override fun getNewListSize(): Int = items.size
 
-                override fun getOldListSize(): Int = items.size
+                override fun getOldListSize(): Int = jokeList.size
             })
 
             jokeList = items.toMutableList()
@@ -88,12 +89,12 @@ class JokeAdapter(private val onItemClick: onItemClick) :
 class JokeItemViewHolder(private val binding: JokeItemRowBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun onBind(item: JokeResponse, clickListener: onItemClick) {
+    fun onBind(item: JokeOfficial, clickListener: onItemClick) {
         binding.linearLayoutRoot.setOnClickListener {
             clickListener.onCLick(binding.textViewSetup, binding.textViewPunch)
         }
         binding.textViewSetup.text = item.setup
-        binding.textViewPunch.text = item.punchline
+        binding.textViewPunch.text = item.punchLine
     }
 }
 

@@ -52,11 +52,11 @@ class FavouritesJokesFragment : Fragment() {
 
         binding.recyclerViewJokes.adapter = adapter
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.favouritesJokesList.collect {
-                adapter.setItems(it)
-            }
-        }
+//        lifecycleScope.launchWhenStarted {
+//            viewModel.favouritesJokesList.collect {
+//                adapter.setItems(it)
+//            }
+//        }
 
         return binding.root
     }

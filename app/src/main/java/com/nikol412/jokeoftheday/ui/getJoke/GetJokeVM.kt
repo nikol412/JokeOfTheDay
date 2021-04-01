@@ -1,31 +1,55 @@
 package com.nikol412.jokeoftheday.ui.getJoke
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nikol412.jokeoftheday.api.repository.JokeApiRepositoryImpl
 import com.nikol412.jokeoftheday.api.JokeResponse
-import com.nikol412.jokeoftheday.api.repository.JokeApiRepository
+import com.nikol412.jokeoftheday.api.repository.jokeApiRepository.JokeApiRepository
+import com.nikol412.jokeoftheday.api.toJokeOfficial
+import com.nikol412.jokeoftheday.db.model.JokeOfficial
+import com.nikol412.jokeoftheday.db.repository.JokesOfficialRepository
 import com.nikol412.jokeoftheday.ui.base.BaseViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class GetJokeVM(private val jokeApiRepository: JokeApiRepository) : BaseViewModel() {
+class GetJokeVM(
+    private val jokeApiRepository: JokeApiRepository,
+    private val jokesOfficialRepository: JokesOfficialRepository
+) : BaseViewModel() {
 
 
     val jokeResponse = MutableLiveData<JokeResponse>()
+    val jokesList = MutableStateFlow(listOf<JokeOfficial>())
 
     init {
-        fetchJoke()
+        fetchLocalJokes()
     }
 
     fun fetchJoke() {
         viewModelScope.launch {
             isLoading.value = true
-            val result = jokeApiRepository.getJoke()
+            val result = jokeApiRepository.getJoke()?.toJokeOfficial()
             isLoading.value = false
 
-            jokeResponse.value = result ?: return@launch
+            val previousList = jokesList.value.toMutableList()
+            result?.let {
+                previousList.add(it)
+                jokesList.emit(previousList)
+            }
         }
+    }
+
+
+    private fun fetchLocalJokes() {
+        jokesOfficialRepository.findAllJokes().addChangeListener { data ->
+            jokesList.value = data
+        }
+    }
+
+    override fun onCleared() {
+        jokesOfficialRepository.saveJokes(jokesList.value)
+//        jokesOfficialRepository.close()
+
+        super.onCleared()
     }
 
 }

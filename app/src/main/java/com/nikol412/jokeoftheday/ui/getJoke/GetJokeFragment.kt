@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -17,6 +18,7 @@ import com.nikol412.jokeoftheday.databinding.FragmentGetJokeBinding
 import com.nikol412.jokeoftheday.ui.getJoke.adapter.JokeAdapter
 import com.nikol412.jokeoftheday.ui.getJoke.adapter.onItemClick
 import com.nikol412.jokeoftheday.ui.getJoke.adapter.onItemTouchAdapter
+import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -60,8 +62,13 @@ class GetJokeFragment : Fragment() {
         binding.recyclerViewJokes.adapter = adapter
 
 
+        lifecycleScope.launchWhenResumed {
+            viewModel.jokesList.collect { list ->
+                adapter.setItems(list)
+            }
+        }
         viewModel.jokeResponse.observe(viewLifecycleOwner, { joke ->
-            adapter.setItem(joke)
+//            adapter.setItem(joke)
         })
         return binding.root
     }

@@ -1,4 +1,4 @@
-package com.nikol412.jokeoftheday.api.repository
+package com.nikol412.jokeoftheday.api.repository.jokeApiRepository
 
 import com.nikol412.jokeoftheday.api.JokeResponse
 
