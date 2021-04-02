@@ -7,5 +7,5 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel { GetJokeVM(get(), get()) }
-    viewModel { FavouritesJokesViewModel() }
+    viewModel { FavouritesJokesViewModel(get()) }
 }
