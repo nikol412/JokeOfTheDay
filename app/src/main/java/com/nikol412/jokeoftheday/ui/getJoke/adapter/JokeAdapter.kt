@@ -1,5 +1,6 @@
 package com.nikol412.jokeoftheday.ui.getJoke.adapter
 
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -72,9 +73,13 @@ class JokeAdapter(private val onItemClick: onItemClick) :
     }
 
     override fun onSwipe(position: Int, direction: Int) {
+        onItemClick.onSwipe(position, direction)
+
         when (direction) {
             ItemTouchHelper.END -> {
-                jokeList.removeAt(position)
+                jokeList.getOrNull(position)?.let {
+                    jokeList.remove(it)
+                }
                 notifyItemRemoved(position)
             }
             ItemTouchHelper.START -> {
@@ -96,10 +101,16 @@ class JokeItemViewHolder(private val binding: JokeItemRowBinding) :
         binding.textViewSetup.text = item.setup
         binding.textViewPunch.text = item.punchLine
     }
+
+    fun changeBackground(color: Int) {
+        binding.linearLayoutRoot.background = ColorDrawable(color)
+    }
 }
 
 interface onItemClick {
     fun onCLick(preTextView: TextView, postTextView: TextView)
+
+    fun onSwipe(position: Int, direction: Int)
 }
 
 interface onItemTouchAdapter {

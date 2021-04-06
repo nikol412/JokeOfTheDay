@@ -7,9 +7,13 @@ interface JokesOfficialRepository {
 
     fun findAllJokes(): RealmResults<JokeOfficial>
 
+    fun findRecentJokes(): RealmResults<JokeOfficial>
+
      fun findStarred(): RealmResults<JokeOfficial>
 
      fun saveJokes(jokes: List<JokeOfficial>)
+
+     fun addToFavourites(joke: JokeOfficial)
 
      fun close()
 }

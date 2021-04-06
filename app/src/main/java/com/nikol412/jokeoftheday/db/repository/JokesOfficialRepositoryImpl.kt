@@ -12,10 +12,24 @@ class JokesOfficialRepositoryImpl : JokesOfficialRepository {
             .findAllAsync()
     }
 
+    override fun findRecentJokes(): RealmResults<JokeOfficial> {
+        return realm.where(JokeOfficial::class.java)
+            .equalTo(JokeOfficial::isStarred.name, false)
+            .findAll()
+    }
+
+
     override fun findStarred(): RealmResults<JokeOfficial> {
         return realm.where(JokeOfficial::class.java)
             .equalTo(JokeOfficial::isStarred.name, true)
             .findAllAsync()
+    }
+
+    override fun addToFavourites(joke: JokeOfficial) {
+        realm.executeTransaction { realm ->
+            joke.isStarred = true
+            realm.copyToRealmOrUpdate(joke)
+        }
     }
 
     override fun saveJokes(jokes: List<JokeOfficial>) {

@@ -32,6 +32,10 @@ class FavouritesJokesFragment : Fragment() {
             override fun onCLick(preTextView: TextView, postTextView: TextView) {
                 expandTextView(preTextView, postTextView)
             }
+
+            override fun onSwipe(position: Int, direction: Int) {
+                viewModel.removeJoke(position)
+            }
         })
     }
 

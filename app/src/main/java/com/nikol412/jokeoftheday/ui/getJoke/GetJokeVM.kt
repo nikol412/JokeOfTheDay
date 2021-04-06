@@ -38,9 +38,19 @@ class GetJokeVM(
         }
     }
 
+    fun addJokeToFavourite(position: Int) {
+        jokesList.value.getOrNull(position)?.let { joke ->
+            val mutableList = jokesList.value.toMutableList()
+            mutableList.removeAt(position)
+            jokesList.value = mutableList
+            jokesOfficialRepository.addToFavourites(joke)
+        }
+
+    }
+
 
     private fun fetchLocalJokes() {
-        jokesOfficialRepository.findAllJokes().addChangeListener { data ->
+        jokesOfficialRepository.findRecentJokes().addChangeListener { data ->
             jokesList.value = data
         }
     }

@@ -22,4 +22,10 @@ class FavouritesJokesViewModel(private val jokesOfficialRepository: JokesOfficia
             mutableFavouritesJokesList.value = data.toList()
         }
     }
+
+    fun removeJoke(position: Int) {
+        val mutableList = mutableFavouritesJokesList.value.toMutableList()
+        mutableList.removeAt(position)
+        mutableFavouritesJokesList.value = mutableList
+    }
 }
